@@ -5,7 +5,7 @@ import { client } from '@/lib/rpc';
 type ResponseType = InferResponseType<(typeof client.api.auth)['sign-in']['$post']>;
 type RequestType = InferRequestType<(typeof client.api.auth)['sign-in']['$post']>['json'];
 
-export const useLogin = () => {
+export const useSignin = () => {
   return useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (data) => {
       const response = await client.api.auth['sign-in'].$post({ json: data });

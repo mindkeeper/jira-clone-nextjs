@@ -4,12 +4,17 @@ import { SigninSchema } from '../_schema/signin-schema';
 import { SignupSchema } from '../_schema/signup-schema';
 import { createAdminClient } from '@/lib/appwrite';
 import { AppwriteException, ID } from 'node-appwrite';
-import { setCookie } from 'hono/cookie';
+import { deleteCookie, setCookie } from 'hono/cookie';
 import { AUTH_COOKIE } from '../constant';
 import { StatusCode } from 'hono/utils/http-status';
+import { sessionMiddleware } from '@/lib/session-middleware';
 const app = new Hono();
 
 const routes = app
+  .get('/me', sessionMiddleware, async (c) => {
+    const user = c.get('user');
+    return c.json(user, 200);
+  })
   .post('/sign-in', zValidator('json', SigninSchema), async (c) => {
     try {
       const { email, password } = c.req.valid('json');
@@ -72,6 +77,13 @@ const routes = app
       }
       return c.json(errorResponse, errorResponse.statusCode as StatusCode);
     }
+  })
+  .post('/sign-out', sessionMiddleware, async (c) => {
+    const account = c.get('account');
+
+    deleteCookie(c, AUTH_COOKIE);
+    await account.deleteSession('current');
+    return c.json({ success: true });
   });
 
 export default routes;
