@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { InferRequestType, InferResponseType } from 'hono';
 import { client } from '@/lib/server/rpc';
 import { toast } from 'sonner';
@@ -8,6 +8,8 @@ type ResponseType = InferResponseType<(typeof client.api.auth)['sign-in']['$post
 type RequestType = InferRequestType<(typeof client.api.auth)['sign-in']['$post']>['json'];
 
 export const useSignin = () => {
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   return useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (data) => {
@@ -19,6 +21,9 @@ export const useSignin = () => {
     },
     onSuccess: () => {
       toast.success('Sign in success, Welcome back!');
+      queryClient.invalidateQueries({
+        queryKey: ['current-session'],
+      });
       router.push('/');
     },
   });
