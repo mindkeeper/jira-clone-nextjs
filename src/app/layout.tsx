@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import './globals.css';
 import ReactQueryProvider from '@/providers/react-query';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: {
@@ -20,10 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <ReactQueryProvider>
+    <ReactQueryProvider>
+      <html lang='en'>
         <body className={cn('antialiased min-h-screen', inter.className)}>{children}</body>
-      </ReactQueryProvider>
-    </html>
+        <Toaster />
+      </html>
+    </ReactQueryProvider>
   );
 }
