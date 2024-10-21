@@ -1,4 +1,4 @@
-import { client } from '@/lib/rpc';
+import { client } from '@/lib/server/rpc';
 import { useQuery } from '@tanstack/react-query';
 
 export const useCurrentSession = () =>
