@@ -2,12 +2,12 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { SigninSchema } from '../_schema/signin-schema';
 import { SignupSchema } from '../_schema/signup-schema';
-import { createAdminClient } from '@/lib/appwrite';
+import { createAdminClient } from '@/lib/server/appwrite';
 import { AppwriteException, ID } from 'node-appwrite';
 import { deleteCookie, setCookie } from 'hono/cookie';
 import { AUTH_COOKIE } from '../constant';
 import { StatusCode } from 'hono/utils/http-status';
-import { sessionMiddleware } from '@/lib/session-middleware';
+import { sessionMiddleware } from '@/lib/server/session-middleware';
 const app = new Hono();
 
 const routes = app
